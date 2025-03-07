@@ -28,6 +28,19 @@ npm install
 npm run dev
 ```
 
+### Setup the progress bar
+
+By default a total bytes value is hardcoded in the template. 
+```javascript
+const TOTAL_BYTES = 248476;
+```
+
+To get an accurate progress you would need to run your MPC app and log the `totalBytesRef` value, and update the `TOTAL_BYTES`:
+```javascript
+totalBytesRef.current += msg.byteLength;
+console.log('Total bytes exchanged', totalBytesRef.current);
+```
+
 ## License
 
 This is a template repository. You are free to use it as a starting point for
