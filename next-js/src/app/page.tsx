@@ -2,7 +2,7 @@
 
 import AsyncQueue from '@/utils/AsyncQueue';
 import generateJoiningCode from '@/utils/generateJoiningCode';
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { RtcPairSocket } from 'rtc-pair-socket';
 import styles from './page.module.css';
 import generateProtocol from '@/utils/generateProtocol';
@@ -17,6 +17,7 @@ export default function Home() {
   const [number, setNumber] = useState<number>();
   const [result, setResult] = useState<string>();
   const [progress, setProgress] = useState<number>(0);
+  const totalBytesRef = useRef(0);
 
   const handleHost = useCallback(async () => {
     // 128 bits of entropy
@@ -99,6 +100,7 @@ export default function Home() {
 
         socket.send(msg);
 
+        totalBytesRef.current += msg.byteLength;
         setProgress(progress => (progress += msg.byteLength));
       });
 
@@ -109,6 +111,7 @@ export default function Home() {
 
         session.handleMessage(otherParty, msg);
 
+        totalBytesRef.current += msg.byteLength;
         setProgress(progress => (progress += msg.byteLength));
       });
 
